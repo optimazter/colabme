@@ -46,7 +46,7 @@ Open a terminal in the root of your desired project and type the following.
 ```
 colabme setup -s path/to/your/key.json
 ```
-If you have created a certain folder you want to upload to as explained in step *3.4*, you can set the parent folder as follows
+If you have created a certain folder you want to upload to as explained in step *3.1*, you can set the parent folder as follows
 
 ```
 colabme setup -p folder ID
