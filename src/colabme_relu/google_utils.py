@@ -18,14 +18,17 @@ def upload(service, tracker: Tracker, paths: list = None, parent_id: str = None)
         for path in paths:
             id = None
 
-            if path in tracker.files.keys():
+            if path in tracker.files.keys() and not is_ignored(path, tracker):
                 Logger.echo(f"{path} is already tracked. Deleting it from Google Drive to update it.")
                 delete_path(service, tracker.files[path])
             
-            if os.path.isfile(path) and not path in tracker.ignored_files:
+            if is_ignored(path, tracker):
+                Logger.echo(f"{path} is ignored. Skipping.")
+
+            elif os.path.isfile(path):
                 id = upload_file(service, path, parent_id)
 
-            elif os.path.isdir(path) and not path in tracker.ignored_files:
+            elif os.path.isdir(path):
                 id = upload_directory(service, path, parent_id)
 
             else:
@@ -128,5 +131,9 @@ def delete_path(service, folder_id):
 
 
 
-
+def is_ignored(path, tracker):
+    for ignored in tracker.ignored_files:
+        if path.endswith(ignored):
+            return True
+    return False
 

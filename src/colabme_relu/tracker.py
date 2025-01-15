@@ -18,10 +18,10 @@ class Tracker:
 
     def from_json(json):
         return Tracker(
-            files = json[Field.FILES],
-            ignored_files= json[Field.IGNORED_FILES],
-            service_account_file= json[Field.SERVICE_ACCOUNT_FILE],
-            parent_id = json[Field.PARENT_ID]
+            files = json[Field.FILES] if Field.FILES in json else {},
+            ignored_files= json[Field.IGNORED_FILES] if Field.IGNORED_FILES in json else [],
+            service_account_file= json[Field.SERVICE_ACCOUNT_FILE] if Field.SERVICE_ACCOUNT_FILE in json else None,
+            parent_id = json[Field.PARENT_ID] if Field.PARENT_ID in json else None
         )
     
     def to_json(self):

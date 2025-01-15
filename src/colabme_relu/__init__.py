@@ -46,7 +46,7 @@ def setup(service, parent, verbose):
 @click.option("-u", "--update", help="Update all tracked files.", is_flag=True, default=False)
 @click.option("-a", "--all", help="Commit all files in current directory.", is_flag=True, default=False)
 @click.option("-v", "--verbose", help="Verbose mode", is_flag=True, default=False)
-def commit(files: tuple[str, ...], update, verbose):
+def commit(files: tuple[str, ...], update, all, verbose):
     Logger.set_verbose(verbose)
 
     if not os.path.isdir(DIR):
@@ -84,7 +84,7 @@ def commit(files: tuple[str, ...], update, verbose):
 
 
 
-@click.command()
+@cli.command()
 @click.argument("files", nargs=-1)
 @click.option("-v", "--verbose", help="Verbose mode", is_flag=True, default=False)
 def ignore(files: tuple[str, ...], verbose):
@@ -104,11 +104,11 @@ def ignore(files: tuple[str, ...], verbose):
 
 
 
-@click.command()
+@cli.command()
 @click.argument("files", nargs=-1)
 @click.option("-a", "--all", help="Unignore all files.", is_flag=True, default=False)
 @click.option("-v", "--verbose", help="Verbose mode", is_flag=True, default=False)
-def unignore(files: tuple[str, ...], verbose):
+def unignore(files: tuple[str, ...], all, verbose):
     Logger.set_verbose(verbose)
 
     if not os.path.isdir(DIR):
