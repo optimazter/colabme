@@ -61,6 +61,11 @@ After your first commit you can also choose to update all your tracked files by:
 colabme commit -u
 ```
 
+### 3.6 - Debug errors
+
+It is recomended to always enable verbose mode by adding *-v* or *--verbose* flag to your command to check that everything goes as expected.
+E.g., if you have set the wrong parent ID the commit will still be succesful but will not happen in the folder you intended.
+
 # 4 - References
 
  * https://www.labnol.org/google-api-service-account-220404/
