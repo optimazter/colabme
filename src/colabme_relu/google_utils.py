@@ -21,11 +21,11 @@ def upload(service, tracker: Tracker, paths: list = None, parent_id: str = None)
             if path in tracker.files.keys():
                 Logger.echo(f"{path} is already tracked. Deleting it from Google Drive to update it.")
                 delete_path(service, tracker.files[path])
-
-            if os.path.isfile(path):
+            
+            if os.path.isfile(path) and not path in tracker.ignored_files:
                 id = upload_file(service, path, parent_id)
 
-            elif os.path.isdir(path):
+            elif os.path.isdir(path) and not path in tracker.ignored_files:
                 id = upload_directory(service, path, parent_id)
 
             else:

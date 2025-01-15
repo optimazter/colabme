@@ -58,7 +58,7 @@ Where the folder ID can be found in the URL of your folder. This is everything t
 To commit files and/or folders to your Google drive you can now simply:
 
 ```
-colabme commit file1 file2 folder1 folder2 ....
+colabme commit file1 file2 folder1 folder2 ...
 ```
 After your first commit you can also choose to update all your tracked files by:
 
@@ -66,7 +66,27 @@ After your first commit you can also choose to update all your tracked files by:
 colabme commit -u
 ```
 
-### 3.4 - Debug errors
+### 3.4 - Ignore files
+
+To ignore files or folders run the following command:
+
+```
+colabme ignore file1 file2 folder1 folder2 ...
+```
+
+If you want to unignore them simply run:
+
+```
+colabme unignore file1 file2 folder1 folder2 ...
+```
+
+or to unignore all:
+
+```
+colabme ignore -a
+```
+
+### 3.5 - Debug errors
 
 It is recomended to always enable verbose mode by adding *-v* or *--verbose* flag to your command to check that everything goes as expected.
 E.g., if you have set the wrong parent ID the commit will still be succesful but will not happen in the folder you intended.
