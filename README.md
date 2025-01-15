@@ -1,4 +1,4 @@
-# 1 -About
+# 1 - About
 
 colabme is a simple cli written in python for uploading files to a Google drive project.
 
