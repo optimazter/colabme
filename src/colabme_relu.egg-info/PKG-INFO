@@ -1,0 +1,15 @@
+Metadata-Version: 2.2
+Name: colabme_relu
+Version: 0.0.1
+Summary: A simple command line interface for uploading files to google service account.
+Author-email: Adrian Hjertholm Voldseth <adrian@relu.no>
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# About
+
+colabme is a simple cli written in python for uploading files to a google service account project.

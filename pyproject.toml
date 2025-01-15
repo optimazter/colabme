@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0", "rich", "click", "google-api-python-client", "google-auth"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "colabme_relu"
+version = "0.0.1"
+authors = [
+  { name="Adrian Hjertholm Voldseth", email="adrian@relu.no" },
+]
+description = "A simple command line interface for uploading files to google service account."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+colabme = "colabme_relu:cli"
