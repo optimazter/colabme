@@ -72,6 +72,12 @@ To commit files and/or folders to your Google drive you can now simply:
 ```
 colabme commit file1 file2 folder1 folder2 ...
 ```
+
+To commit all files in the current directory call:
+```
+colabme commit -a
+```
+
 After your first commit you can also choose to update all your tracked files by:
 
 ```

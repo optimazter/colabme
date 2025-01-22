@@ -2,7 +2,7 @@ import os
 import sys
 import click
 
-from colabme_relu.google_utils import upload, load_tracker, save_tracker, create_service
+from colabme_relu.google_utils import upload_paths, update_paths, remove_paths, remove_all_paths, load_tracker, save_tracker, load_service
 from colabme_relu.log import Logger, LogLevel
 
 
@@ -52,37 +52,53 @@ def commit(files: tuple[str, ...], update, all, verbose):
     if not os.path.isdir(DIR):
         os.mkdir(DIR)
 
-
     tracker = load_tracker(TRACKER_FILE)
+    service = load_service(tracker, SCOPES)
 
-    if tracker.service_account_file is None:
-        Logger.echo("No service account file provided. Please run colab setup to provide a service account file.", LogLevel.ERROR)
+    if not service:
         sys.exit(1)
-
-    elif not os.path.isfile(tracker.service_account_file):
-        Logger.echo(f"Specified service account file {tracker.service_account_file} does not exist.", LogLevel.ERROR)
-        sys.exit(1)
-
-    else:
-        service = create_service(tracker.service_account_file, SCOPES)   
-        Logger.echo(f"Loading service from file:  {tracker.service_account_file}.")
     
     if update:
         Logger.echo("Updating all tracked files.")
-        upload(service, tracker, tracker.files, tracker.parent_id)
+        update_paths(service, tracker)
     
     if files:
         Logger.echo("Uploading specified files.")
-        upload(service, tracker, files, tracker.parent_id)
+        upload_paths(service, tracker, files, tracker.parent_id)
     
     if all:
         Logger.echo("Uploading all files in the current directory.")
-        upload(service, tracker, os.listdir("."), tracker.parent_id)
+        upload_paths(service, tracker, os.listdir("."), tracker.parent_id)
 
     save_tracker(TRACKER_FILE, tracker)
     Logger.echo("The operation completed.")
 
+@cli.command()
+@click.argument("files", nargs=-1)
+@click.option("-a", "--all", help="Remove all files in the repository!", is_flag=True, default=False)
+@click.option("-v", "--verbose", help="Verbose mode", is_flag=True, default=False)
+def remove(files: tuple[str, ...], all, verbose):
+    Logger.set_verbose(verbose)
 
+    if not os.path.isdir(DIR):
+        os.mkdir(DIR)
+
+    tracker = load_tracker(TRACKER_FILE)
+    service = load_service(tracker, SCOPES)
+
+    if not service:
+        sys.exit(1)
+
+    if files:
+        Logger.echo(f"Removing specified files: {files}.")
+        remove_paths(service, tracker, files)
+    
+    if all:
+        Logger.echo("Removing all tracked files.")
+        remove_all_paths(service, tracker)
+
+    save_tracker(TRACKER_FILE, tracker)
+    Logger.echo("The operation completed.")
 
 @cli.command()
 @click.argument("files", nargs=-1)
@@ -97,7 +113,7 @@ def ignore(files: tuple[str, ...], verbose):
 
     if files:
         Logger.echo(f"Ignoring specified files: {files}.")
-        tracker.ignored_files.extend(files)
+        tracker.ignore_files(files)
 
     save_tracker(TRACKER_FILE, tracker)
     Logger.echo("The operation completed.")
@@ -118,7 +134,7 @@ def unignore(files: tuple[str, ...], all, verbose):
 
     if files:
         Logger.echo(f"Unignoring specified files: {files}.")
-        tracker.ignored_files = [file for file in tracker.ignored_files if file not in files]
+        tracker.unignore_files(files)
     
     if all:
         Logger.echo("Unignoring all files.")
@@ -126,3 +142,26 @@ def unignore(files: tuple[str, ...], all, verbose):
 
     save_tracker(TRACKER_FILE, tracker)
     Logger.echo("The operation completed.")
+
+
+@cli.command()
+def list():
+    Logger.set_verbose(True)
+
+    if not os.path.isdir(DIR):
+        os.mkdir(DIR)
+
+    tracker = load_tracker(TRACKER_FILE)
+
+    if not tracker.files:
+        Logger.echo("No files are tracked.")
+    else:
+        Logger.echo("Tracked files:")
+        for file in tracker.files:
+            Logger.echo(f"{file.path}: {file.id}")
+
+    if tracker.ignored_files:
+        Logger.echo("Ignored files:")
+        for file in tracker.ignored_files:
+            Logger.echo(file)
+    
